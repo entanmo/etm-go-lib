@@ -12,7 +12,7 @@ func init() {
 	RegisterTrs(DELEGATE, &tr)
 }
 
-func (delegate *Delegate) create(tr *Transaction,data UserData) {
+func (delegate *Delegate) create(tr *Transaction, data UserData) {
 
 }
 

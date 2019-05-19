@@ -1,11 +1,11 @@
 package base
 
 import (
+	"bytes"
+	"crypto/sha256"
+	"encoding/binary"
 	"fmt"
 	"workspace/etm-go-lib/src/utils"
-	"crypto/sha256"
-	"bytes"
-	"encoding/binary"
 )
 
 type TrType uint8
@@ -36,7 +36,7 @@ type Transaction struct {
 	Timestamp          int64       `json:"timestamp"`
 	Asset              interface{} `json:"asset"`
 	Args               []string    `json:"args"`
-	Message            string `json:"message"`
+	Message            string      `json:"message"`
 	Signature          string      `json:"signature"`
 	SignSignature      string      `json:"signSignature"`
 	SenderPublicKey    string
@@ -75,7 +75,7 @@ func (tr *Transaction) Create(data UserData) {
 	if data.Keypair.IsEmpty() {
 		return
 	}
-	
+
 	tr.Type = data.Type
 	tr.Amount = 0
 	tr.Fee = data.Fee
@@ -83,49 +83,50 @@ func (tr *Transaction) Create(data UserData) {
 	tr.Asset = data.Asset
 	tr.Args = data.Args
 	tr.Message = data.Message
-	
+
 	trs[data.Type].create(tr, data) //构建对应子交易数据
-	
+
 	tr.Signature = tr.GetSignature(data.Keypair)
-	if (data.Type != 1 && data.SecondKeypair.IsEmpty()) {
+	if data.Type != 1 && data.SecondKeypair.IsEmpty() {
 		tr.SignSignature = tr.GetSignature(data.SecondKeypair)
 	}
-	
+
 	tr.Id = tr.GetId();
 }
 
 func (tr *Transaction) GetBytes(skipSignature bool, skipSecondSignature bool) []byte {
-	size := 1 + 4 + 32 + 32 + 8 + 8 + 64 + 64;
+	size := 1 + 4 + 32 + 32 + 8 + 8 + 64 + 64
+
 	assetBytes := trs[tr.Type].getBytes(tr)
 	assetSize := len(assetBytes)
-	
+
 	bb := bytes.NewBuffer(make([]byte, size+assetSize))
-	
+
 	binary.Write(bb, binary.LittleEndian, uint8(tr.Type))
 	binary.Write(bb, binary.LittleEndian, uint32(tr.Timestamp))
-	
+
 	bb.WriteString(tr.SenderPublicKey)
 	bb.WriteString(tr.RequesterPublicKey)
 	bb.WriteString(tr.RecipientId)
-	
+
 	binary.Write(bb, binary.LittleEndian, uint64(tr.Amount))
-	
+
 	if tr.Message != "" {
 		bb.WriteString(string(tr.Message))
 	}
-	
+
 	if assetSize > 0 {
 		bb.Write(assetBytes)
 	}
-	
+
 	if !skipSignature && tr.Signature != "" {
 		bb.WriteString(tr.Signature)
 	}
-	
+
 	if !skipSecondSignature && tr.SignSignature != "" {
 		bb.WriteString(tr.SignSignature)
 	}
-	
+
 	return bb.Bytes()
 }
 
