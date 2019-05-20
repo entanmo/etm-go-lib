@@ -4,7 +4,7 @@ type Delay struct {
 }
 
 func init() {
-	tr := Vote{}
+	tr := Delay{}
 	RegisterTrs(DELAY, &tr)
 }
 

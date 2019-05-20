@@ -4,7 +4,7 @@ type Undelegate struct {
 }
 
 func init() {
-	tr := Vote{}
+	tr := Undelegate{}
 	RegisterTrs(UNDELEGATE, &tr)
 }
 

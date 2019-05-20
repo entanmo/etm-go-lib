@@ -4,7 +4,7 @@ type Multi struct {
 }
 
 func init() {
-	tr := Vote{}
+	tr := Multi{}
 	RegisterTrs(MULTI, &tr)
 }
 

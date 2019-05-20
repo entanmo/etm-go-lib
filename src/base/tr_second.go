@@ -1,17 +1,32 @@
 package base
 
+import (
+	"fmt"
+	"bytes"
+	"encoding/hex"
+)
+
 type Second struct {
+	PublicKey string
 }
 
 func init() {
-	tr := Vote{}
+	tr := Second{}
 	RegisterTrs(SECOND, &tr)
 }
 
 func (second *Second) create(tr *Transaction, data UserData) {
-
+	tr.RecipientId = ""
+	tr.Amount = 0
+	tr.Asset.Signature.PublicKey = fmt.Sprintf("%x", data.SecondKeypair.PublicKey)
 }
 
 func (second *Second) getBytes(tr *Transaction) []byte {
-	return nil
+	bb := bytes.NewBuffer([]byte{})
+	if tr.Asset.Signature.PublicKey != "" {
+		
+		signaturePublicKeyBytes, _ := hex.DecodeString(tr.SenderPublicKey)
+		bb.Write(signaturePublicKeyBytes)
+	}
+	return bb.Bytes()
 }

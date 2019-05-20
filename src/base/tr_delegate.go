@@ -5,6 +5,8 @@ import (
 )
 
 type Delegate struct {
+	Username string
+	PublicKey string
 }
 
 func init() {

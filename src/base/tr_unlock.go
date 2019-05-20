@@ -4,7 +4,7 @@ type Unlock struct {
 }
 
 func init() {
-	tr := Vote{}
+	tr := Unlock{}
 	RegisterTrs(UNLOCK, &tr)
 }
 

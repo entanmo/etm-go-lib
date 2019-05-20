@@ -1,8 +1,11 @@
 package base
 
-import "reflect"
+import (
+	"reflect"
+)
 
 type Account struct {
+	PublicKey string
 }
 
 func (a Account) IsEmpty() bool {
