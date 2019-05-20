@@ -9,7 +9,7 @@ func init() {
 }
 
 func (lock *Lock) create(tr *Transaction, data UserData) {
-
+	tr.Args = data.Args
 }
 
 func (lock *Lock) getBytes(tr *Transaction) []byte {

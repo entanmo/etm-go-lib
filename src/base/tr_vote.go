@@ -1,5 +1,7 @@
 package base
 
+import "bytes"
+
 type Vote struct {
 	Votes []string
 }
@@ -14,5 +16,10 @@ func (vote *Vote) create(tr *Transaction, data UserData) {
 }
 
 func (vote *Vote) getBytes(tr *Transaction) []byte {
-	return nil
+	bb := bytes.NewBuffer([]byte{})
+	for i := 0; i < len(tr.Asset.Vote.Votes); i++ {
+		bb.WriteString(tr.Asset.Vote.Votes[i])
+	}
+	
+	return bb.Bytes()
 }

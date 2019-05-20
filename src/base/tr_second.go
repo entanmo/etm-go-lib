@@ -24,9 +24,9 @@ func (second *Second) create(tr *Transaction, data UserData) {
 func (second *Second) getBytes(tr *Transaction) []byte {
 	bb := bytes.NewBuffer([]byte{})
 	if tr.Asset.Signature.PublicKey != "" {
-		
-		signaturePublicKeyBytes, _ := hex.DecodeString(tr.SenderPublicKey)
+		signaturePublicKeyBytes, _ := hex.DecodeString(tr.Asset.Signature.PublicKey)
 		bb.Write(signaturePublicKeyBytes)
 	}
+	
 	return bb.Bytes()
 }

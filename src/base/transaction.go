@@ -82,6 +82,7 @@ type UserData struct {
 	Keypair       utils.Keypair
 	SecondKeypair utils.Keypair
 	Votes         []string
+	Username      string
 }
 
 func (tr *Transaction) Create(data UserData) {
@@ -96,10 +97,10 @@ func (tr *Transaction) Create(data UserData) {
 	tr.Amount = 0
 	tr.Fee = data.Fee
 	tr.Timestamp = data.Timestamp
+	tr.SenderPublicKey = data.Sender.PublicKey
 	tr.Asset = data.Asset
 	tr.Args = data.Args
 	tr.Message = data.Message
-	tr.SenderPublicKey = data.Sender.PublicKey
 	
 	trs[data.Type].create(tr, data) //构建对应子交易数据
 	

@@ -9,7 +9,8 @@ func init() {
 }
 
 func (undelegate *Undelegate) create(tr *Transaction, data UserData) {
-
+	tr.RecipientId = ""
+	tr.Amount = 0
 }
 
 func (undelegate *Undelegate) getBytes(tr *Transaction) []byte {
