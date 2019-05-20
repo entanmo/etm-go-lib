@@ -107,15 +107,27 @@ func trUnlock() base.Transaction {
 	return tr
 }
 
+func trDelay() base.Transaction {
+	data := base.UserData{
+		Type:        110,
+		Amount:      123456789,
+		Fee:         10000000,
+		Timestamp:   18972768,
+		RecipientId: "A79wqbYgZC5Bb923wWDXKjD7KBDn5BD6gg",
+		Args:[]string{"123"},
+	}
+	tr := generateTr("race forget pause shoe trick first abuse insane hope budget river enough", data)
+	return tr
+}
 func main() {
 	//tr := trTransfer()
 	//tr := trSecond()
 	//tr := trDelegate()
-	tr := trUndelegate()
+	//tr := trUndelegate()
 	//tr := trVote()
 	//tr := trLock()
 	//tr := trUnlock()
-	
+	tr := trDelay()
 	
 	fmt.Println("tr=", tr)
 }

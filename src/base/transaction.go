@@ -83,6 +83,7 @@ type UserData struct {
 	SecondKeypair utils.Keypair
 	Votes         []string
 	Username      string
+	Currency  string
 }
 
 func (tr *Transaction) Create(data UserData) {
