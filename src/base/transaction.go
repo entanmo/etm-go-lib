@@ -70,20 +70,33 @@ func RegisterTrs(trType TrType, tr SubTr) {
 }
 
 type UserData struct {
-	Type          TrType
-	Amount        int64
-	Fee           int64
-	Timestamp     int64
-	RecipientId   string
-	Asset         Asset
-	Args          []string
-	Message       string
-	Sender        Account
-	Keypair       utils.Keypair
-	SecondKeypair utils.Keypair
-	Votes         []string
-	Username      string
-	Currency  string
+	Type           TrType
+	Amount         int64
+	Fee            int64
+	Timestamp      int64
+	RecipientId    string
+	Asset          Asset
+	Args           []string
+	Message        string
+	Sender         Account
+	Keypair        utils.Keypair
+	SecondKeypair  utils.Keypair
+	Votes          []string
+	Username       string
+	Name           string
+	Desc           string
+	Maximun        string
+	Precision      byte
+	Strategy       string
+	AllawWriteOff  byte
+	AllowWhiteList byte
+	AllowBlackList byte
+	Currency       string
+	UiaAmount      string
+	FlagType       byte
+	Flag           byte
+	Operator       string
+	List           []string
 }
 
 func (tr *Transaction) Create(data UserData) {

@@ -1,8 +1,12 @@
 package base
 
+import (
+	"bytes"
+)
+
 type UiaIssue struct {
-	Currency string
-	Amount   int64
+	Currency  string
+	UiaAmount string
 }
 
 func init() {
@@ -11,9 +15,18 @@ func init() {
 }
 
 func (issue *UiaIssue) create(tr *Transaction, data UserData) {
-
+	tr.RecipientId = ""
+	tr.Amount = 0
+	tr.Asset.UiaIssue = UiaIssue{
+		Currency:  data.Currency,
+		UiaAmount: data.UiaAmount,
+	}
 }
 
 func (issue *UiaIssue) getBytes(tr *Transaction) []byte {
-	return nil
+	bb := bytes.NewBuffer([]byte{})
+	bb.WriteString(tr.Asset.UiaIssue.Currency)
+	bb.WriteString(tr.Asset.UiaIssue.UiaAmount)
+	
+	return bb.Bytes()
 }

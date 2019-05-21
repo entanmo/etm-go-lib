@@ -79,7 +79,7 @@ func trVote() base.Transaction {
 		Type:      3,
 		Fee:       10000000,
 		Timestamp: 18972768,
-		Votes:      []string{"+c6b1f18afa85a21df50cf9580c63c0aca4643a4a4e4ec93c2e397c81e87879b9"},
+		Votes:     []string{"+c6b1f18afa85a21df50cf9580c63c0aca4643a4a4e4ec93c2e397c81e87879b9"},
 	}
 	tr := generateTr("worry net spend unfold desert trust dove waste grain people swap twelve", data)
 	return tr
@@ -114,11 +114,96 @@ func trDelay() base.Transaction {
 		Fee:         10000000,
 		Timestamp:   18972768,
 		RecipientId: "A79wqbYgZC5Bb923wWDXKjD7KBDn5BD6gg",
-		Args:[]string{"123"},
+		Args:        []string{"123"},
 	}
 	tr := generateTr("race forget pause shoe trick first abuse insane hope budget river enough", data)
 	return tr
 }
+
+// uia
+
+func trUiaIssuer() base.Transaction {
+	data := base.UserData{
+		Type:      9,
+		Fee:       10000000000,
+		Timestamp: 18972768,
+		Name:      "QQQ",
+		Desc:      "QQQ desc",
+	}
+	tr := generateTr("real rally sketch sorry place parrot typical cart stone mystery age nominee", data)
+	return tr
+}
+
+func trUiaAsset() base.Transaction {
+	data := base.UserData{
+		Type:           10,
+		Fee:            50000000000,
+		Timestamp:      18972768,
+		Name:           "QQQ.WWW",
+		Desc:           "QQQ desc",
+		Maximun:        "1000000000000",
+		Precision:      4,
+		Strategy:       "",
+		AllawWriteOff:  0,
+		AllowWhiteList: 0,
+		AllowBlackList: 0,
+	}
+	tr := generateTr("real rally sketch sorry place parrot typical cart stone mystery age nominee", data)
+	return tr
+}
+
+func trUiaIssue() base.Transaction {
+	data := base.UserData{
+		Type:      13,
+		Fee:       10000000,
+		Timestamp: 18972768,
+		Currency:  "QQQ.WWW",
+		UiaAmount: "1000000000000",
+	}
+	tr := generateTr("real rally sketch sorry place parrot typical cart stone mystery age nominee", data)
+	return tr
+}
+
+func trUiaTransfer() base.Transaction {
+	data := base.UserData{
+		Type:        14,
+		Fee:         10000000,
+		Timestamp:   18972768,
+		RecipientId: "A79wqbYgZC5Bb923wWDXKjD7KBDn5BD6gg",
+		Currency:    "QQQ.WWW",
+		UiaAmount:   "100000000",
+	}
+	tr := generateTr("real rally sketch sorry place parrot typical cart stone mystery age nominee", data)
+	return tr
+}
+
+func trUiaFlags() base.Transaction {
+	data := base.UserData{
+		Type:      11,
+		Fee:       10000000,
+		Timestamp: 18972768,
+		Currency:  "QQQ.WWW",
+		FlagType:  1,
+		Flag:      2,
+	}
+	tr := generateTr("real rally sketch sorry place parrot typical cart stone mystery age nominee", data)
+	return tr
+}
+
+func trUiaAcl() base.Transaction {
+	data := base.UserData{
+		Type:      12,
+		Fee:       10000000,
+		Timestamp: 18972768,
+		Currency:  "QQQ.WWW",
+		Operator:  "aaaa",
+		Flag:      1,
+		List:      []string{"a", "b"},
+	}
+	tr := generateTr("real rally sketch sorry place parrot typical cart stone mystery age nominee", data)
+	return tr
+}
+
 func main() {
 	//tr := trTransfer()
 	//tr := trSecond()
@@ -127,7 +212,14 @@ func main() {
 	//tr := trVote()
 	//tr := trLock()
 	//tr := trUnlock()
-	tr := trDelay()
+	//tr := trDelay()
+	
+	//tr := trUiaIssuer()
+	//tr := trUiaAsset()
+	//tr := trUiaIssue()
+	//tr := trUiaTransfer()
+	//tr := trUiaFlags()
+	tr := trUiaAcl()
 	
 	fmt.Println("tr=", tr)
 }
