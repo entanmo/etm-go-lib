@@ -5,10 +5,14 @@ import (
 	"bytes"
 	"crypto/sha256"
 	"workspace/etm-go-lib/src/utils"
+	"reflect"
 )
+
+const maxPayloadLength  = 8 * 1024 * 1024
 
 type Block struct {
 	Id                   string        `json:"id"`
+	Height               int64        `json:"height"`
 	Version              string        `json:"version"`
 	TotalAmount          int64         `json:"totalAmount"`
 	TotalFee             int64         `json:"totalFee"`
@@ -22,8 +26,25 @@ type Block struct {
 	Transactions         []Transaction `json:"transactions"`
 }
 
-func (block *Block) Create(data UserData) {
+type BlockData struct {
+	Transactions  []Transaction
+	PreviousBlock Block
+}
 
+func sortTransactions(trs []Transaction) []Transaction {
+	return trs
+}
+
+func (block *Block) IsEmpty() bool {
+	return reflect.DeepEqual(block, Block{})
+}
+
+func (block *Block) Create(data BlockData) {
+	//trs := sortTransactions(data.Transactions)
+	//var nextHeight int64 = 1
+	//if !data.PreviousBlock.IsEmpty() {
+	//	nextHeight = data.PreviousBlock.Height + 1
+	//}
 }
 
 func (block *Block) GetBytes() []byte {
