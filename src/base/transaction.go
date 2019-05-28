@@ -197,7 +197,6 @@ func (tr *Transaction) GetId() string {
 
 func (tr *Transaction) GetSignature(keypair utils.Keypair) string {
 	_hash := tr.GetHash()
-	ed := utils.Ed{}
 	_sign := ed.Sign(_hash[:], keypair)
 	return fmt.Sprintf("%x", _sign)
 }
@@ -205,7 +204,6 @@ func (tr *Transaction) GetSignature(keypair utils.Keypair) string {
 func (tr *Transaction) GetMultiSignature(keypair utils.Keypair) string {
 	_bytes := tr.GetBytes(true, true)
 	_hash := sha256.Sum256(_bytes)
-	ed := utils.Ed{}
 	_sign := ed.Sign(_hash[:], keypair)
 	return fmt.Sprintf("%x", _sign)
 }
