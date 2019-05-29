@@ -8,6 +8,7 @@ import (
 	"reflect"
 	"encoding/binary"
 	"encoding/hex"
+	"sort"
 )
 
 const maxPayloadLength = 8 * 1024 * 1024
@@ -18,14 +19,14 @@ var blockStatus = utils.BlockStatus{}
 type Block struct {
 	Id                   string        `json:"id"`
 	Height               int64         `json:"height"`
-	Version              int        `json:"version"`
+	Version              int           `json:"version"`
 	TotalAmount          int64         `json:"totalAmount"`
 	TotalFee             int64         `json:"totalFee"`
 	Reward               int64         `json:"reward"`
 	PayloadHash          string        `json:"payloadHash"`
 	Timestamp            int64         `json:"timestamp"`
 	NumberOfTransactions int           `json:"NnumberOfTransactions"`
-	PayloadLength        int         `json:"payloadLength"`
+	PayloadLength        int           `json:"payloadLength"`
 	PreviousBlock        string        `json:"previousBlock"`
 	GeneratorPublicKey   string        `json:"generatorPublicKey"`
 	Transactions         []Transaction `json:"transactions"`
@@ -39,7 +40,32 @@ type BlockData struct {
 	Keypair       utils.Keypair
 }
 
+type SortTrs []Transaction
+
+func (s SortTrs) Len() int {
+	return len(s)
+}
+func (s SortTrs) Swap(i, j int) {
+	s[i], s[j] = s[j], s[i]
+}
+func (s SortTrs) Less(i, j int) bool {
+	if (s[i].Type != s[j].Type) {
+		if (s[i].Type == 1) {
+			return true
+		}
+		if (s[j].Type == 1) {
+			return false
+		}
+		return s[i].Type > s[j].Type
+	}
+	if (s[i].Amount != s[j].Amount) {
+		return s[i].Amount > s[j].Amount
+	}
+	return s[i].Id > s[j].Id
+}
+
 func sortTransactions(trs []Transaction) []Transaction {
+	sort.Sort(SortTrs(trs))
 	return trs
 }
 
@@ -58,13 +84,14 @@ func (block *Block) Create(data BlockData) {
 	var totalAmount int64
 	var size int
 	
-	var blockTrs []Transaction
+	blockTrs := trs[:]
 	payloadHash := sha256.New()
 	
 	for i := 0; i < len(trs); i++ {
 		bs := trs[i].GetBytes(false, false)
 		
-		if size+len(bs) > 8*1024*1024 {
+		if size+len(bs) > maxPayloadLength {
+			blockTrs = trs[:i]
 			break
 		}
 		
@@ -72,8 +99,6 @@ func (block *Block) Create(data BlockData) {
 		totalFee += trs[i].Fee
 		totalAmount += trs[i].Amount
 		
-		//blockTrs.
-		//payloadHash.Sum(bs)
 		payloadHash.Write(bs)
 	}
 	
@@ -98,9 +123,9 @@ func (block *Block) GetBytes() []byte {
 	binary.Write(bb, binary.LittleEndian, uint32(block.Version))
 	binary.Write(bb, binary.LittleEndian, uint32(block.Timestamp))
 	
-	if block.PreviousBlock != ""{
+	if block.PreviousBlock != "" {
 		bb.WriteString(block.PreviousBlock)
-	}else{
+	} else {
 		bb.WriteString("0")
 	}
 	
@@ -117,7 +142,7 @@ func (block *Block) GetBytes() []byte {
 	generatorPublicKeyBytes, _ := hex.DecodeString(block.GeneratorPublicKey)
 	bb.Write(generatorPublicKeyBytes)
 	
-	if block.BlockSignature != ""{
+	if block.BlockSignature != "" {
 		blockSignatureBytes, _ := hex.DecodeString(block.BlockSignature)
 		bb.Write(blockSignatureBytes)
 	}
