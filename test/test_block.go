@@ -5,6 +5,7 @@ import (
 	"crypto/sha256"
 	"workspace/etm-go-lib/src/utils"
 	"workspace/etm-go-lib/src/base"
+	"encoding/json"
 )
 
 
@@ -39,7 +40,8 @@ func main()  {
 	}
 	
 	block.Create(data)
-	fmt.Println(block)
+	blockByte,_ := json.Marshal(&block)
+	fmt.Println("block=",string(blockByte))
 	
 	fmt.Println(block.GetBytes())
 	

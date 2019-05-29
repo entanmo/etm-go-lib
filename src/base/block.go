@@ -17,20 +17,20 @@ var ed = utils.Ed{}
 var blockStatus = utils.BlockStatus{}
 
 type Block struct {
-	Id                   string        `json:"id"`
-	Height               int64         `json:"height"`
 	Version              int           `json:"version"`
 	TotalAmount          int64         `json:"totalAmount"`
 	TotalFee             int64         `json:"totalFee"`
 	Reward               int64         `json:"reward"`
 	PayloadHash          string        `json:"payloadHash"`
 	Timestamp            int64         `json:"timestamp"`
-	NumberOfTransactions int           `json:"NnumberOfTransactions"`
+	NumberOfTransactions int           `json:"numberOfTransactions"`
 	PayloadLength        int           `json:"payloadLength"`
 	PreviousBlock        string        `json:"previousBlock"`
 	GeneratorPublicKey   string        `json:"generatorPublicKey"`
 	Transactions         []Transaction `json:"transactions"`
 	BlockSignature       string        `json:"blockSignature"`
+	Height               int64         `json:"height"`
+	Id                   string        `json:"id"`
 }
 
 type BlockData struct {
@@ -45,9 +45,11 @@ type SortTrs []Transaction
 func (s SortTrs) Len() int {
 	return len(s)
 }
+
 func (s SortTrs) Swap(i, j int) {
 	s[i], s[j] = s[j], s[i]
 }
+
 func (s SortTrs) Less(i, j int) bool {
 	if (s[i].Type != s[j].Type) {
 		if (s[i].Type == 1) {
@@ -115,6 +117,9 @@ func (block *Block) Create(data BlockData) {
 	block.Transactions = blockTrs
 	
 	block.BlockSignature = block.GetSignature(data.Keypair)
+	
+	block.Id = block.GetId()
+	block.Height = nextHeight
 }
 
 func (block *Block) GetBytes() []byte {

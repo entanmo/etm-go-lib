@@ -6,6 +6,7 @@ import (
 	"workspace/etm-go-lib/src/base"
 	"workspace/etm-go-lib/src/utils"
 	"crypto/sha256"
+	"encoding/json"
 )
 
 func generateTr(secret string, data base.UserData) base.Transaction {
@@ -221,5 +222,7 @@ func main() {
 	//tr := trUiaFlags()
 	tr := trUiaAcl()
 	
-	fmt.Println("tr=", tr)
+	trByte,_ := json.Marshal(&tr)
+	
+	fmt.Println("tr=", string(trByte))
 }
